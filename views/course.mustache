@@ -1,4 +1,3 @@
-
 {{> head}}
 {{> header}}
 
@@ -9,23 +8,44 @@
   </p>
   <p>{{course.description}}</p>
   <p class="muted">Dates: {{course.startDate}} – {{course.endDate}}</p>
+  <p class="muted">
+    {{#course.location}}Location: {{course.location}}{{/course.location}}
+    {{#course.price}} {{#course.location}}•{{/course.location}} Price: £{{course.price}}{{/course.price}}
+  </p>
 
   <section>
     <h2>Book the full course</h2>
-   <form action="/courses/{{course.id}}/book" method="post">  <!-- If you add CSRF later: <input type="hidden" name="_csrf" value="{{csrfToken}}"> -->
-      <input type="hidden" name="userId" value="{{user._id}}">
+
+    {{#user}}
+    <form action="/bookings/course" method="post">
+      <input type="hidden" name="courseId" value="{{course._id}}">
       <button class="btn primary" type="submit">Book full course</button>
     </form>
+    {{/user}}
+
+    {{^user}}
+    <p class="muted">
+      <a href="/auth/login">Log in</a> to book this course.
+    </p>
+    {{/user}}
   </section>
 
   <section>
     <h2>Sessions</h2>
+
+    {{#sessions}}
     <table class="table">
       <thead>
-        <tr><th>Start</th><th>End</th><th>Capacity</th><th>Booked</th><th>Remaining</th><th></th></tr>
+        <tr>
+          <th>Start</th>
+          <th>End</th>
+          <th>Capacity</th>
+          <th>Booked</th>
+          <th>Remaining</th>
+          <th></th>
+        </tr>
       </thead>
       <tbody>
-        {{#sessions}}
         <tr>
           <td>{{start}}</td>
           <td>{{end}}</td>
@@ -33,19 +53,37 @@
           <td>{{booked}}</td>
           <td>{{remaining}}</td>
           <td>
-            {{#../course.allowDropIn}}
-            <form method="postook
-              <button class="btn" type="submit" {{#isFull}}disabled{{/isFull}}>Book this session</button>
-            </form>
-            {{/../course.allowDropIn}}
-            {{^../course.allowDropIn}}
-              <span class="muted">Drop-ins disabled</span>
-            {{/../course.allowDropIn}}
+            {{#allowDropIn}}
+              {{#user}}
+              <form action="/bookings/session" method="post">
+                <input type="hidden" name="sessionId" value="{{sessionId}}">
+                <button class="btn" type="submit" {{#isFull}}disabled{{/isFull}}>
+                  Book this session
+                </button>
+              </form>
+              {{/user}}
+
+              {{^user}}
+              <span class="muted"><a href="/auth/login">Log in</a> to book</span>
+              {{/user}}
+            {{/allowDropIn}}
+
+            {{^allowDropIn}}
+            <span class="muted">Drop-ins disabled</span>
+            {{/allowDropIn}}
+
+            {{#isFull}}
+            <span class="muted">Full</span>
+            {{/isFull}}
           </td>
         </tr>
-        {{/sessions}}
       </tbody>
     </table>
+    {{/sessions}}
+
+    {{^sessions}}
+    <p>No sessions scheduled for this course.</p>
+    {{/sessions}}
   </section>
 </article>
 

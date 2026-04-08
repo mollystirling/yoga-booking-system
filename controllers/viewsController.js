@@ -1,50 +1,90 @@
 // controllers/viewsController.js
 import { CourseModel } from "../models/courseModel.js";
 import { SessionModel } from "../models/sessionModel.js";
-import {
-  bookCourseForUser,
-  bookSessionForUser,
-} from "../services/bookingService.js";
 import { BookingModel } from "../models/bookingModel.js";
 
 const fmtDate = (iso) =>
-  new Date(iso).toLocaleString("en-GB", {
-    weekday: "short",
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
+  iso
+    ? new Date(iso).toLocaleString("en-GB", {
+        weekday: "short",
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+      })
+    : "TBA";
+
 const fmtDateOnly = (iso) =>
-  new Date(iso).toLocaleDateString("en-GB", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  });
+  iso
+    ? new Date(iso).toLocaleDateString("en-GB", {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+      })
+    : "";
 
 export const homePage = async (req, res, next) => {
   try {
     const courses = await CourseModel.list();
+
     const cards = await Promise.all(
-      courses.map(async (c) => {
-        const sessions = await SessionModel.listByCourse(c._id);
+      courses.map(async (course) => {
+        const sessions = await SessionModel.listByCourse(course._id);
         const nextSession = sessions[0];
+
         return {
-          id: c._id,
-          title: c.title,
-          level: c.level,
-          type: c.type,
-          allowDropIn: c.allowDropIn,
-          startDate: c.startDate ? fmtDateOnly(c.startDate) : "",
-          endDate: c.endDate ? fmtDateOnly(c.endDate) : "",
+          id: course._id,
+          title: course.title,
+          level: course.level,
+          type: course.type,
+          allowDropIn: course.allowDropIn,
+          startDate: fmtDateOnly(course.startDate),
+          endDate: fmtDateOnly(course.endDate),
           nextSession: nextSession ? fmtDate(nextSession.startDateTime) : "TBA",
           sessionsCount: sessions.length,
-          description: c.description,
+          description: course.description,
+          location: course.location || "",
+          price: course.price ?? "",
         };
       })
     );
-    res.render("home", { title: "Yoga Courses", courses: cards });
+
+    res.render("home", {
+      title: "Yoga Courses",
+      courses: cards,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const aboutPage = async (req, res, next) => {
+  try {
+    const courses = await CourseModel.list();
+
+    const courseSummaries = courses.map((course) => ({
+      title: course.title,
+      level: course.level,
+      type: course.type,
+      location: course.location || "Studio location shown on course page",
+      price: course.price ?? "",
+      description: course.description,
+    }));
+
+    res.render("about", {
+      title: "About the Studio",
+      studio: {
+        name: "Yoga Studio",
+        description:
+          "We offer welcoming yoga and mindfulness classes for a range of experience levels, from beginner sessions to more advanced workshops.",
+        location:
+          "Classes take place at our Glasgow studio locations. Full venue details are shown on each course page.",
+        classesInfo:
+          "Our timetable includes weekly block courses and weekend workshops, with some classes allowing drop-in booking.",
+      },
+      courses: courseSummaries,
+    });
   } catch (err) {
     next(err);
   }
@@ -54,32 +94,43 @@ export const courseDetailPage = async (req, res, next) => {
   try {
     const courseId = req.params.id;
     const course = await CourseModel.findById(courseId);
-    if (!course)
-      return res
-        .status(404)
-        .render("error", { title: "Not found", message: "Course not found" });
+
+    if (!course) {
+      return res.status(404).render("error", {
+        title: "Not found",
+        message: "Course not found",
+      });
+    }
 
     const sessions = await SessionModel.listByCourse(courseId);
-    const rows = sessions.map((s) => ({
-      id: s._id,
-      start: fmtDate(s.startDateTime),
-      end: fmtDate(s.endDateTime),
-      capacity: s.capacity,
-      booked: s.bookedCount ?? 0,
-      remaining: Math.max(0, (s.capacity ?? 0) - (s.bookedCount ?? 0)),
+
+    const rows = sessions.map((session) => ({
+      sessionId: session._id,
+      start: fmtDate(session.startDateTime),
+      end: fmtDate(session.endDateTime),
+      capacity: session.capacity,
+      booked: session.bookedCount ?? 0,
+      remaining: Math.max(
+        0,
+        (session.capacity ?? 0) - (session.bookedCount ?? 0)
+      ),
+      allowDropIn: course.allowDropIn,
+      isFull: (session.bookedCount ?? 0) >= (session.capacity ?? 0),
     }));
 
     res.render("course", {
       title: course.title,
       course: {
-        id: course._id,
+        _id: course._id,
         title: course.title,
         level: course.level,
         type: course.type,
         allowDropIn: course.allowDropIn,
-        startDate: course.startDate ? fmtDateOnly(course.startDate) : "",
-        endDate: course.endDate ? fmtDateOnly(course.endDate) : "",
+        startDate: fmtDateOnly(course.startDate),
+        endDate: fmtDateOnly(course.endDate),
         description: course.description,
+        location: course.location || "",
+        price: course.price ?? "",
       },
       sessions: rows,
     });
@@ -88,45 +139,32 @@ export const courseDetailPage = async (req, res, next) => {
   }
 };
 
-export const postBookCourse = async (req, res, next) => {
-  try {
-    const courseId = req.params.id;
-    const booking = await bookCourseForUser(req.user._id, courseId);
-    res.redirect(`/bookings/${booking._id}?status=${booking.status}`);
-  } catch (err) {
-    res
-      .status(400)
-      .render("error", { title: "Booking failed", message: err.message });
-  }
-};
-
-export const postBookSession = async (req, res, next) => {
-  try {
-    const sessionId = req.params.id;
-    const booking = await bookSessionForUser(req.user._id, sessionId);
-    res.redirect(`/bookings/${booking._id}?status=${booking.status}`);
-  } catch (err) {
-    const message =
-      err.code === "DROPIN_NOT_ALLOWED"
-        ? "Drop-ins are not allowed for this course."
-        : err.message;
-    res.status(400).render("error", { title: "Booking failed", message });
-  }
-};
-
 export const bookingConfirmationPage = async (req, res, next) => {
   try {
     const bookingId = req.params.bookingId;
     const booking = await BookingModel.findById(bookingId);
-    if (!booking)
-      return res
-        .status(404)
-        .render("error", { title: "Not found", message: "Booking not found" });
+
+    if (!booking) {
+      return res.status(404).render("error", {
+        title: "Not found",
+        message: "Booking not found",
+      });
+    }
+
+    const isOwner = booking.userId === req.user?._id;
+    const isOrganiser = req.user?.role === "organiser";
+
+    if (!isOwner && !isOrganiser) {
+      return res.status(403).render("error", {
+        title: "Access denied",
+        message: "You are not allowed to view this booking.",
+      });
+    }
 
     res.render("booking_confirmation", {
       title: "Booking confirmation",
       booking: {
-        id: booking._id,
+        _id: booking._id,
         type: booking.type,
         status: req.query.status || booking.status,
         createdAt: booking.createdAt ? fmtDate(booking.createdAt) : "",

@@ -1,0 +1,37 @@
+{{> head}}
+{{> header}}
+
+<h1>{{heading}}</h1>
+
+{{#participants}}
+<table class="table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Booking Type</th>
+      <th>Status</th>
+      <th>Booked At</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#.}}
+    <tr>
+      <td>{{name}}</td>
+      <td>{{email}}</td>
+      <td>{{type}}</td>
+      <td>{{status}}</td>
+      <td>{{createdAt}}</td>
+    </tr>
+    {{/.}}
+  </tbody>
+</table>
+{{/participants}}
+
+{{^participants}}
+<p>No participants found.</p>
+{{/participants}}
+
+<p><a class="btn" href="/organiser">Back to organiser dashboard</a></p>
+
+{{> footer}}

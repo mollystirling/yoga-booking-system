@@ -1,0 +1,39 @@
+{{> head}}
+{{> header}}
+
+<h1>Manage Users</h1>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Role</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#users}}
+    <tr>
+      <td>{{name}}</td>
+      <td>{{email}}</td>
+      <td>{{role}}</td>
+      <td>
+        {{^isOrganiser}}
+        <form method="post" action="/organiser/users/{{_id}}/promote" style="display:inline;">
+          <button class="btn" type="submit">Make organiser</button>
+        </form>
+        {{/isOrganiser}}
+
+        <form method="post" action="/organiser/users/{{_id}}/remove" style="display:inline;">
+          <button class="btn" type="submit">Remove user</button>
+        </form>
+      </td>
+    </tr>
+    {{/users}}
+  </tbody>
+</table>
+
+<p><a class="btn" href="/organiser">Back to organiser dashboard</a></p>
+
+{{> footer}}

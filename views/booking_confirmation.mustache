@@ -1,17 +1,25 @@
-
 {{> head}}
 {{> header}}
 
 <h1>Booking Confirmation</h1>
-<p>Your booking has been created.</p>
+
+<p class="muted">
+  Your booking has been successfully created.
+</p>
 
 <dl class="kv">
-  <dt>ID</dt><dd>{{booking.id}}</dd>
+  <dt>Booking ID</dt><dd>{{booking._id}}</dd>
   <dt>Type</dt><dd>{{booking.type}}</dd>
   <dt>Status</dt><dd>{{booking.status}}</dd>
   <dt>Created</dt><dd>{{booking.createdAt}}</dd>
 </dl>
 
-<p><a class="btn" href></p>
+<p>
+  <a class="btn" href="/courses">Browse more courses</a>
+</p>
 
-{{>
+<form method="post" action="/bookings/{{booking._id}}/cancel">
+  <button class="btn" type="submit">Cancel Booking</button>
+</form>
+
+{{> footer}}

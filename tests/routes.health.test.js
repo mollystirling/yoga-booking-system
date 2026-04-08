@@ -15,10 +15,10 @@ describe("Health & 404", () => {
     expect(res.body).toEqual({ ok: true });
   });
 
-  test("GET /no-such-route triggers 404 text/plain", async () => {
+  test("GET /no-such-route renders 404 page", async () => {
     const res = await request(app).get("/no-such-route");
     expect(res.status).toBe(404);
-    expect(res.headers["content-type"]).toMatch(/text\/plain/);
-    expect(res.text).toMatch(/404 Not found/i);
+    expect(res.headers["content-type"]).toMatch(/html/i);
+    expect(res.text).toMatch(/404|not found/i);
   });
 });

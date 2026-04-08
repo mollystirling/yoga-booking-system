@@ -1,0 +1,48 @@
+{{> head}}
+{{> header}}
+
+<h1>Organise courses</h1>
+
+<p>
+  <a class="btn primary" href="/organiser/courses/new">Add New Course</a>
+  <a class="btn" href="/organiser/users">Manage Users</a>
+</p>
+
+<div class="cards">
+  {{#courses}}
+  <article class="card">
+    <h2>{{title}}</h2>
+    <p>{{description}}</p>
+
+    <p class="muted">
+      Level: {{level}} • Type: {{type}}
+    </p>
+
+    <p class="muted">
+      Dates: {{startDate}} – {{endDate}}
+    </p>
+
+    <p class="muted">
+      {{#location}}Location: {{location}} • {{/location}}
+      {{#price}}Price: £{{price}} • {{/price}}
+      Sessions: {{sessionsCount}}
+    </p>
+
+    <p>
+      <a class="btn" href="/courses/{{_id}}">View</a>
+      <a class="btn" href="/organiser/courses/{{_id}}/edit">Edit</a>
+      <a class="btn" href="/organiser/courses/{{_id}}/participants">Participants</a>
+    </p>
+
+    <form method="post" action="/organiser/courses/{{_id}}/delete">
+      <button class="btn" type="submit">Delete</button>
+    </form>
+  </article>
+  {{/courses}}
+
+  {{^courses}}
+    <p>No courses created yet.</p>
+  {{/courses}}
+</div>
+
+{{> footer}}

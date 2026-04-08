@@ -7,8 +7,14 @@ const canReserveAll = (sessions) =>
   sessions.every((s) => (s.bookedCount ?? 0) < (s.capacity ?? 0));
 
 export async function bookCourseForUser(userId, courseId) {
+  const existing = await BookingModel.findExistingCourseBooking(userId, courseId);
+  if (existing) {
+    throw new Error("You have already booked this course");
+  }
+
   const course = await CourseModel.findById(courseId);
   if (!course) throw new Error("Course not found");
+
   const sessions = await SessionModel.listByCourse(courseId);
   if (sessions.length === 0) throw new Error("Course has no sessions");
 
@@ -16,7 +22,9 @@ export async function bookCourseForUser(userId, courseId) {
   if (!canReserveAll(sessions)) {
     status = "WAITLISTED";
   } else {
-    for (const s of sessions) await SessionModel.incrementBookedCount(s._id, 1);
+    for (const s of sessions) {
+      await SessionModel.incrementBookedCount(s._id, 1);
+    }
   }
 
   return BookingModel.create({
@@ -29,8 +37,14 @@ export async function bookCourseForUser(userId, courseId) {
 }
 
 export async function bookSessionForUser(userId, sessionId) {
+  const existing = await BookingModel.findExistingSessionBooking(userId, sessionId);
+  if (existing) {
+    throw new Error("You have already booked this session");
+  }
+
   const session = await SessionModel.findById(sessionId);
   if (!session) throw new Error("Session not found");
+
   const course = await CourseModel.findById(session.courseId);
   if (!course) throw new Error("Course not found");
 

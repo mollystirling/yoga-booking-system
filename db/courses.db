@@ -1,0 +1,9 @@
+{"title":"Beginner Yoga","level":"beginner","type":"WEEKLY_BLOCK","description":"A gentle introduction to yoga.","location":"Glasgow Studio A","price":50,"startDate":"2026-05-01","endDate":"2026-06-01","allowDropIn":true,"sessionIds":["aM5VsT7H7Finkgjt","D3Dea1bLFkmqo59D"],"_id":"MiMO2IYo4FIKLd2y"}
+{"title":"Advanced Flow","level":"advanced","type":"WEEKEND_WORKSHOP","description":"Challenging flows for experienced yogis.","location":"Glasgow Studio B","price":75,"startDate":"2026-06-10","endDate":"2026-06-12","allowDropIn":false,"sessionIds":["aygx2Xl1Ch7EPvv6","MLSqrv3hR8XPCir9"],"_id":"nNH2NDAHUaobi2aS"}
+{"$$deleted":true,"_id":"nNH2NDAHUaobi2aS"}
+{"title":"pilates","level":"beginner","type":"WEEKLY_BLOCK","description":"pilates for beginners","location":"glasgow","price":50,"startDate":"2026-04-09","endDate":"2026-04-11","allowDropIn":false,"sessionIds":[],"_id":"Jh5WbHZ4WeIRXkKk"}
+{"title":"Abs workout","level":"advanced","type":"WEEKLY_BLOCK","description":"come workout with us","location":"glasgow","price":10,"startDate":"2026-04-09","endDate":"2026-04-12","allowDropIn":true,"sessionIds":[],"_id":"idKxGXkLNmpweFGv"}
+{"$$deleted":true,"_id":"Jh5WbHZ4WeIRXkKk"}
+{"title":"Beginner Yoga","level":"beginner","type":"WEEKLY_BLOCK","description":"A gentle introduction to yoga.","location":"Glasgow Studio A","price":50,"startDate":"2026-05-01","endDate":"2026-06-01","allowDropIn":true,"sessionIds":["aM5VsT7H7Finkgjt","D3Dea1bLFkmqo59D"],"_id":"MiMO2IYo4FIKLd2y"}
+{"title":"pilates","level":"beginner","type":"WEEKLY_BLOCK","description":"fun","location":"glasgow","price":10,"startDate":"2026-04-02","endDate":"2026-04-10","allowDropIn":true,"sessionIds":[],"_id":"OcTARblIJ9YSC9dR"}
+{"title":"belly dancing","level":"beginner","type":"WEEKLY_BLOCK","description":"have fun","location":"glasgow Studio A","price":10,"startDate":"2026-04-08","endDate":"2026-04-11","allowDropIn":true,"sessionIds":[],"_id":"Xp0sePlao2qql80K"}

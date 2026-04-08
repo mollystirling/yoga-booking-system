@@ -5,24 +5,41 @@ import { SessionModel } from "../models/sessionModel.js";
 
 const router = Router();
 
-// List courses
 router.get("/", async (req, res) => {
-  const courses = await CourseModel.list();
-  res.json({ courses });
+  try {
+    const courses = await CourseModel.list();
+    res.json({ courses });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to load courses." });
+  }
 });
 
-// Create course
 router.post("/", async (req, res) => {
-  const course = await CourseModel.create(req.body);
-  res.status(201).json({ course });
+  try {
+    const course = await CourseModel.create(req.body);
+    res.status(201).json({ course });
+  } catch (err) {
+    console.error(err);
+    res.status(400).json({ error: "Failed to create course." });
+  }
 });
 
-// Get course + sessions
 router.get("/:id", async (req, res) => {
-  const course = await CourseModel.findById(req.params.id);
-  if (!course) return res.status(404).json({ error: "Course not found" });
-  const sessions = await SessionModel.listByCourse(course._id);
-  res.json({ course, sessions });
+  try {
+    const course = await CourseModel.findById(req.params.id);
+
+    if (!course) {
+      return res.status(404).json({ error: "Course not found." });
+    }
+
+    const sessions = await SessionModel.listByCourse(course._id);
+
+    res.json({ course, sessions });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to load course." });
+  }
 });
 
 export default router;

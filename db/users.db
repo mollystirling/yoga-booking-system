@@ -1,2 +1,8 @@
+{"name":"molly","email":"molly@gmail.com","passwordHash":"$2b$10$BMzlbG7EDj89tVt81rfy2em74/fX7cH9E33oq45LCrcRUWbgioNmq","role":"user","_id":"foFtQGIXRgRfEggt"}
+{"name":"molly stirling","email":"molly@email.com","passwordHash":"$2b$10$.tjsjnJLYjg6yBkSxMFHFOL1Gle4sMhl.a51WlLpVZ/svJmpS9kYG","role":"organiser","_id":"g9onq0meAUkzEFWc"}
 {"$$indexCreated":{"fieldName":"email","unique":true,"sparse":false}}
-{"name":"Fiona","email":"fiona@student.local","role":"student","_id":"cqhGQKxArmgTO1Se"}
+{"name":"hannah brown","email":"hannah@email.com","passwordHash":"$2b$10$hXVqKkdfbjnfFf/F8nUyFuNwEq1086hk7ld2mrHIzmaACAsXQIoyW","role":"user","_id":"1aJRIb6f3U6mWyWB"}
+{"$$deleted":true,"_id":"foFtQGIXRgRfEggt"}
+{"$$deleted":true,"_id":"1aJRIb6f3U6mWyWB"}
+{"name":"hannah","email":"hannah@email.com","passwordHash":"$2b$10$wvWvnhXa/QGEKdD8JtIDY.pmlV0GNA56jguveVvnOvaYILYjeBGGO","role":"user","_id":"6qBY0rPcQKz4fTKS"}
+{"name":"hannah","email":"hannah@email.com","passwordHash":"$2b$10$wvWvnhXa/QGEKdD8JtIDY.pmlV0GNA56jguveVvnOvaYILYjeBGGO","role":"organiser","_id":"6qBY0rPcQKz4fTKS"}

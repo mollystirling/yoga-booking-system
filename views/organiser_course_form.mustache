@@ -1,0 +1,126 @@
+{{> head}}
+{{> header}}
+
+<h1>{{title}}</h1>
+
+<form method="post" action="{{action}}">
+  <div class="field">
+    <label for="title">Course title</label>
+    <input id="title" name="title" type="text" value="{{course.title}}" required>
+  </div>
+
+  <div class="field">
+    <label for="level">Level</label>
+    <select id="level" name="level" required>
+      <option value="beginner" {{#course.isBeginner}}selected{{/course.isBeginner}}>Beginner</option>
+      <option value="intermediate" {{#course.isIntermediate}}selected{{/course.isIntermediate}}>Intermediate</option>
+      <option value="advanced" {{#course.isAdvanced}}selected{{/course.isAdvanced}}>Advanced</option>
+    </select>
+  </div>
+
+  <div class="field">
+    <label for="type">Type</label>
+    <select id="type" name="type" required>
+      <option value="WEEKLY_BLOCK" {{#course.isWeeklyBlock}}selected{{/course.isWeeklyBlock}}>Weekly Block</option>
+      <option value="WEEKEND_WORKSHOP" {{#course.isWeekendWorkshop}}selected{{/course.isWeekendWorkshop}}>Weekend Workshop</option>
+    </select>
+  </div>
+
+  <div class="field">
+    <label for="description">Description</label>
+    <textarea id="description" name="description" rows="4" required>{{course.description}}</textarea>
+  </div>
+
+  <div class="field">
+    <label for="location">Location</label>
+    <input id="location" name="location" type="text" value="{{course.location}}">
+  </div>
+
+  <div class="field">
+    <label for="price">Price (£)</label>
+    <input id="price" name="price" type="number" step="0.01" min="0" value="{{course.price}}">
+  </div>
+
+  <div class="field">
+    <label for="startDate">Start date</label>
+    <input id="startDate" name="startDate" type="date" value="{{course.startDate}}">
+  </div>
+
+  <div class="field">
+    <label for="endDate">End date</label>
+    <input id="endDate" name="endDate" type="date" value="{{course.endDate}}">
+  </div>
+
+  <div class="field">
+    <label for="allowDropIn">Allow drop-ins</label>
+    <select id="allowDropIn" name="allowDropIn">
+      <option value="true" {{#course.allowDropIn}}selected{{/course.allowDropIn}}>Yes</option>
+      <option value="false" {{^course.allowDropIn}}selected{{/course.allowDropIn}}>No</option>
+    </select>
+  </div>
+
+  <button class="btn primary" type="submit">{{submitLabel}}</button>
+  <a class="btn" href="/organiser">Cancel</a>
+</form>
+
+{{#course._id}}
+<hr>
+
+<h2>Sessions for this course</h2>
+
+{{#sessions}}
+<form method="post" action="/organiser/sessions/{{_id}}">
+  <div class="field">
+    <label for="start-{{_id}}">Start</label>
+    <input id="start-{{_id}}" type="datetime-local" name="startDateTime" value="{{startDateTime}}" required>
+  </div>
+
+  <div class="field">
+    <label for="end-{{_id}}">End</label>
+    <input id="end-{{_id}}" type="datetime-local" name="endDateTime" value="{{endDateTime}}" required>
+  </div>
+
+  <div class="field">
+    <label for="capacity-{{_id}}">Capacity</label>
+    <input id="capacity-{{_id}}" type="number" name="capacity" value="{{capacity}}" min="1" required>
+  </div>
+
+  <p class="muted">Booked: {{bookedCount}}</p>
+
+  <button class="btn" type="submit">Update Session</button>
+  <a class="btn" href="/organiser/sessions/{{_id}}/participants">View participants</a>
+</form>
+
+<form method="post" action="/organiser/sessions/{{_id}}/delete">
+  <button class="btn" type="submit">Delete Session</button>
+</form>
+
+<hr>
+{{/sessions}}
+
+{{^sessions}}
+<p>No sessions added yet.</p>
+{{/sessions}}
+
+<h2>Add Session</h2>
+<form method="post" action="/organiser/courses/{{course._id}}/sessions">
+  <div class="field">
+    <label for="startDateTime">Start</label>
+    <input id="startDateTime" type="datetime-local" name="startDateTime" required>
+  </div>
+
+  <div class="field">
+    <label for="endDateTime">End</label>
+    <input id="endDateTime" type="datetime-local" name="endDateTime" required>
+  </div>
+
+  <div class="field">
+    <label for="capacity">Capacity</label>
+    <input id="capacity" type="number" name="capacity" min="1" required>
+  </div>
+
+  <button class="btn primary" type="submit">Add Session</button>
+</form>
+{{/course._id}}
+
+{{> footer}}

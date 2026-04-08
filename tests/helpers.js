@@ -26,17 +26,17 @@ export async function resetDb() {
   ]);
 }
 
-// Seed a minimal dataset used by multiple tests
 export async function seedMinimal() {
-  const student = await UserModel.create({
-    name: "Test Student",
-    email: "student@test.local",
-    role: "student",
+  const user = await UserModel.create({
+    name: "Test User",
+    email: "user@test.local",
+    role: "user",
   });
-  const instructor = await UserModel.create({
-    name: "Test Instructor",
-    email: "instructor@test.local",
-    role: "instructor",
+
+  const organiser = await UserModel.create({
+    name: "Test Organiser",
+    email: "organiser@test.local",
+    role: "organiser",
   });
 
   const course = await CourseModel.create({
@@ -46,12 +46,12 @@ export async function seedMinimal() {
     allowDropIn: true,
     startDate: "2026-02-02",
     endDate: "2026-04-20",
-    instructorId: instructor._id,
+    description: "A test course for route testing.",
+    location: "Test Studio",
+    price: 25,
     sessionIds: [],
-    description: "A test course for E2E route testing.",
   });
 
-  // Two sessions to keep tests fast
   const s1 = await SessionModel.create({
     courseId: course._id,
     startDateTime: new Date("2026-02-02T18:30:00").toISOString(),
@@ -70,5 +70,5 @@ export async function seedMinimal() {
 
   await CourseModel.update(course._id, { sessionIds: [s1._id, s2._id] });
 
-  return { student, instructor, course, sessions: [s1, s2] };
+  return { user, organiser, course, sessions: [s1, s2] };
 }

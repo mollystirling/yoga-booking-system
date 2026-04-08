@@ -1,0 +1,44 @@
+{{> head}}
+{{> header}}
+
+<article>
+  <h1>About the Studio</h1>
+
+  <p>{{studio.description}}</p>
+
+  <section>
+    <h2>Where we run classes</h2>
+    <p>{{studio.location}}</p>
+  </section>
+
+  <section>
+    <h2>Our classes</h2>
+    <p>{{studio.classesInfo}}</p>
+  </section>
+
+  <section>
+    <h2>Current and upcoming courses</h2>
+
+    <div class="cards">
+      {{#courses}}
+      <article class="card">
+        <h3>{{title}}</h3>
+        <p class="muted">
+          Level: {{level}} • Type: {{type}}
+        </p>
+        <p>{{description}}</p>
+        <p class="muted">
+          {{#location}}Location: {{location}}{{/location}}
+          {{#price}} • Price: £{{price}}{{/price}}
+        </p>
+      </article>
+      {{/courses}}
+
+      {{^courses}}
+      <p>No courses available at the moment.</p>
+      {{/courses}}
+    </div>
+  </section>
+</article>
+
+{{> footer}}
