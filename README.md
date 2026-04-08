@@ -2,7 +2,6 @@
 
 ## Overview
 This web application allows users to browse yoga courses, view session details, and make bookings. It also provides organiser functionality to manage courses, sessions, and users.
-
 The system was developed as part of the Web Application Development coursework.
 
 controllers/   → request handling logic  
@@ -55,9 +54,43 @@ middlewares/   → authentication and access control
 
 ---
 
-## Installation & Setup
 
-### 1. Clone the repository
-```bash
-git clone <your-repo-url>
-cd <your-project-folder>
+## Running the Project Locally
+
+### Clone the repository
+git clone https://github.com/mollystirling/yoga-booking-system.git
+Navigate into the folder
+cd yoga-booking-system
+
+
+### Install dependencies
+npm install
+
+
+### Start the application
+npm start
+
+
+### Open in browser
+http://localhost:3000
+
+
+## Deployment (Render)
+
+
+## Live application:
+https://yoga-booking-system-j2ye.onrender.com/
+
+This application is deployed using Render as a Web Service connected to the GitHub repository.
+
+
+## Build command:
+npm install
+
+
+## Start command:
+npm start
+
+
+## The server is configured to use:
+const PORT = process.env.PORT || 3000;
