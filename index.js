@@ -102,7 +102,8 @@ app.use(server_error);
 
 if (process.env.NODE_ENV !== "test") {
   const PORT = process.env.PORT || 3000;
+
   app.listen(PORT, () => {
-    console.log(`Yoga booking running on http://localhost:${PORT}`);
+    console.log(`Server running on port ${PORT}`);
   });
 }
